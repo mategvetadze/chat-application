@@ -4,23 +4,19 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.core.Authentication;
-
+import lombok.*;
 
 
 import java.util.Map;
 
 
 @RestController
+@RequiredArgsConstructor
 public class UserController{
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
-	public UserController(UserRepository userRepository,PasswordEncoder passwordEncoder,JwtService jwtService) {
-		this.userRepository = userRepository;
-        this.passwordEncoder=passwordEncoder;
-        this.jwtService=jwtService;
-	}
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user){
         if(userRepository.existsByUsername(user.getUsername()) 
