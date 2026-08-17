@@ -17,15 +17,17 @@ public class JwtService{
             this.expirationMs=expirationMs;
 
     }
-    public String createToken(String username){
+    public String createToken(String username,String role){
         Date now=new Date();
         Date expiry= new Date(now.getTime()+expirationMs);
         return Jwts.builder()
                 .subject(username)
+                .claim("role",role)
                 .issuedAt(now)
                 .expiration(expiry)
                 .signWith(key)
                 .compact();
+
     }
     public String extractUsername(String token){
         return Jwts.parser()
@@ -34,6 +36,14 @@ public class JwtService{
         .parseSignedClaims(token)
         .getPayload()
         .getSubject();
-
+    }
+    
+    public String extractRole(String token) {
+        return Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("role", String.class);
     }
 }

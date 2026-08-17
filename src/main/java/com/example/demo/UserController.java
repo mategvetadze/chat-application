@@ -4,6 +4,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.access.prepost.PreAuthorize;
+
 import lombok.*;
 
 
@@ -24,6 +26,7 @@ public class UserController{
             return ResponseEntity.status(409).body("username or Email already taken");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole("USER");
         userRepository.save(user);
         return ResponseEntity.status(201).body(
              Map.of(
@@ -46,12 +49,18 @@ public class UserController{
         return ResponseEntity.ok(Map.of(
              "id", user.getId(),
             "username", user.getUsername(),
-            "token", jwtService.createToken(user.getUsername())
+            "token", jwtService.createToken(
+                    user.getUsername(),
+                    user.getRole() == null ? "USER" : user.getRole())
         ));
     }
     @GetMapping("/me")
     public Map<String,String> me(Authentication authentication){
         return Map.of("username",authentication.getName());
     }
-    
+    @GetMapping("/admin/ping")
+    @PreAuthorize("hasRole('ADMIN')")
+    public Map<String,String> adminPing(){
+        return Map.of("ok","admin");
+    }    
 }
