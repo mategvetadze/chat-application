@@ -40,4 +40,4 @@ Spring does **not** load `.env` by itself.
 ## Status
 
 Read `PROGRESS.md` for the current stage, leftovers, and how to test.
-Do not skip ahead (e.g. WebSockets before Stage 3–4 REST chat) unless the student asks. Stage 2 JWT `/me` is proven.
+Do not skip ahead (e.g. WebSockets before Stage 3–4 REST chat) unless the student asks. Stage 3 ownership and Stage 4 rooms REST are proven. Next: messages.
